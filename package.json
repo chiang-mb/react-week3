@@ -1,8 +1,8 @@
 {
-  "name": "react-week2",
+  "name": "react-week3",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://chiang-mb.github.io/react-week2/",
+  "homepage": "https://chiang-mb.github.io/react-week3/",
   "type": "module",
   "scripts": {
     "dev": "vite",
