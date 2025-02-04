@@ -48,6 +48,9 @@ function App() {
         `${BASE_URL}/v2/api/${API_PATH}/admin/products`
       );
       setProducts(res.data.products); // 更新產品列表
+
+      console.log("取得的產品資料：", res.data.products);
+
     } catch (error) {
       alert("取得產品失敗");
     }
@@ -60,8 +63,11 @@ function App() {
     try {
       const res = await axios.post(`${BASE_URL}/v2/admin/signin`, account);
 
+      console.log("登入 API 回應：", res.data);
+
       // 儲存取得的 token 並設定過期時間
       const { token, expired } = res.data;
+      
       document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
 
       axios.defaults.headers.common["Authorization"] = token;
@@ -235,7 +241,7 @@ function App() {
         }
       })
     } catch (error) {
-      alert('新增產品失敗');
+      throw error; // 讓 handleUpdateProduct() 捕捉錯誤並顯示訊息
     }
   }
 
@@ -282,7 +288,8 @@ function App() {
 
       handleCloseProductModal(); // 關閉 Modal
     } catch (error) {
-      alert('更新產品失敗');
+      console.error(error);
+      alert(error.response?.data?.message || "更新產品失敗");
     }
   }
 
@@ -343,7 +350,7 @@ function App() {
     <h1 className="mb-5">請先登入</h1>
     <form onSubmit={handleLogin} className="d-flex flex-column gap-3">
       <div className="form-floating mb-3">
-        <input name="username" value={account.username} onChange={handleInputChange} type="email" className="form-control" id="username" placeholder="name@example.com" />
+        <input name="username" value={account.username} onChange={handleInputChange}  type="email" className="form-control" id="username" placeholder="name@example.com" />
         <label htmlFor="username">Email address</label>
       </div>
       <div className="form-floating">
@@ -489,6 +496,7 @@ function App() {
                     type="number"
                     className="form-control"
                     placeholder="請輸入原價"
+                    min="0"
                   />
                 </div>
                 <div className="col-6">
@@ -503,6 +511,7 @@ function App() {
                     type="number"
                     className="form-control"
                     placeholder="請輸入售價"
+                    min="0"
                   />
                 </div>
               </div>
